@@ -6,6 +6,7 @@ import os, os.path
 target = ""
 dictionary = ""
 errorMessage = ""
+formMethod = ""
 
 def clearconsole():
     os.system("cls || clear")
@@ -56,6 +57,32 @@ def dictionary_file():
         dictionary_file()
 
 
+def set_form_method():
+    global formMethod
+    global errorMessage
+    clearconsole()
+    displaytext()
+
+    print("Wybierz metode formularza: ")
+
+    print(colored("[1]", "yellow") + "\tPOST")
+    print(colored("[2]", "yellow") + "\tGET")
+    print(colored("[3]", "yellow") + "\tWroc do menu")
+
+    set_method = int(input("Wybierz opcje: "))
+
+    if set_method == 1:
+        errorMessage = ""
+        formMethod = "POST"
+    elif set_method == 2:
+        errorMessage = ""
+        formMethod = "GET"
+    elif set_method == 3:
+        errorMessage = ""
+        select_attack()
+    else:
+        errorMessage = "Niepoprawna opcja!"
+        set_form_method()
 
 def select_attack():
     global errorMessage
@@ -69,23 +96,48 @@ def select_attack():
 
     if target or dictionary:
         print(colored("---------------------------------------------------", "light_yellow"))
-        print(colored("IP: ", "yellow") + target)
-        print(colored("Plik: ", "yellow") + dictionary)
+        if target:
+            print(colored("IP: ", "yellow") + target)
+        if dictionary:
+            print(colored("Plik: ", "yellow") + dictionary)
         print(colored("---------------------------------------------------", "light_yellow"))
 
 
-    print(colored("[1]", "yellow") + "\tHTTP")
-    print(colored("[2]", "yellow") + "\tSSH")
-    print(colored("[3]", "yellow") + "\tIP celu")
-    print(colored("[4]", "yellow") + "\tPlik z haslami")
+    if target == "" or dictionary == "":
+        print(colored("[1]", "red") + "\tHTTP")
+        print(colored("[2]", "red") + "\tSSH")
+    else:
+        print(colored("[1]", "light_green") + "\tHTTP")
+        print(colored("[2]", "light_green") + "\tSSH")
+
+
+    if target == "":
+        print(colored("[3]", "yellow") + "\tIP celu" + "\t" + colored("[!]", "light_yellow"))
+    else:
+        print(colored("[3]", "green") + "\tIP celu")
+
+    if dictionary == "":
+        print(colored("[4]", "yellow") + "\tPlik z haslami" + "\t" + colored("[!]", "light_yellow"))
+    else:
+        print(colored("[4]", "green") + "\tPlik z haslami")
+
     print(colored("[5]", "yellow") + "\tZakończ")
 
     set_attack = int(input("Wybierz opcje: "))
 
     if set_attack == 1:
-        errorMessage = ""
+        if target == "" or dictionary == "":
+            errorMessage = "Uzupelnij dane!"
+            select_attack()
+        else:
+            errorMessage = ""
+            set_form_method()
     elif set_attack == 2:
-        errorMessage = ""
+        if target == "" or dictionary == "":
+            errorMessage = "Uzupelnij dane!"
+            select_attack()
+        else:
+            errorMessage = ""
     elif set_attack == 3:
         errorMessage = ""
         target_ip()
