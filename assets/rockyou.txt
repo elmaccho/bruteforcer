@@ -3,3 +3,13 @@ bedzie
 podmianka
 zawartosci
 pliku
+password
+Password
+password12
+password123
+admin
+admin1234
+adminadmin
+qwerty
+qwerty123
+ZAQ!2wsx
