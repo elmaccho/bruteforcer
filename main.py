@@ -7,6 +7,8 @@ target = ""
 dictionary = ""
 errorMessage = ""
 formMethod = ""
+usernames = ""
+username = ""
 
 def clearconsole():
     os.system("cls || clear")
@@ -21,7 +23,6 @@ def displaytext():
     if errorMessage:
         print(colored("------------------" + errorMessage +  "------------------", "red"))
 
-
 def target_ip():
     global target
 
@@ -33,7 +34,6 @@ def target_ip():
     target = set_target
 
     select_attack()
-
 
 def dictionary_file():
     global dictionary, errorMessage
@@ -55,7 +55,6 @@ def dictionary_file():
     else:
         errorMessage = "Plik nie istnieje"
         dictionary_file()
-
 
 def set_form_method():
     global formMethod
@@ -84,22 +83,92 @@ def set_form_method():
         errorMessage = "Niepoprawna opcja!"
         set_form_method()
 
+def set_username():
+    global username, usernames, errorMessage
+
+    username = ""
+    usernames = ""
+
+    clearconsole()
+    displaytext()
+
+    username = input("Wprowadz nazwe uzytkownika: ")
+
+    if username == "":
+        errorMessage = "Wprowadz poprawne dane"
+        set_username()
+    else:
+        errorMessage = ""
+        select_attack()
+
+def set_users_file():
+    global username, usernames, errorMessage
+
+    username = ""
+    usernames = ""
+
+    clearconsole()
+    displaytext()
+
+    usernames = input("Wprowadz sciezke do pliku z nazwami uzytkownikow: ")
+
+    if os.path.isfile(usernames):
+        errorMessage = ""
+        select_attack()
+    elif usernames == "":
+        errorMessage = "Wprowadz poprawne dane"
+        set_users_file()
+    else:
+        errorMessage = "Plik nie istnieje"
+        set_users_file()
+
+def choose_username():
+    global errorMessage
+
+    clearconsole()
+    displaytext()
+
+    print(colored("[1]", "yellow") + "\tPlik usernames")
+    print(colored("[2]", "yellow") + "\tPojedynczy user")
+    print(colored("[3]", "yellow") + "\tWroc do menu")
+
+    set_method = int(input("Wybierz opcje: "))
+
+    if set_method == 1:
+        errorMessage = ""
+        set_users_file()
+    elif set_method == 2:
+        errorMessage = ""
+        set_username()
+    elif set_method == 3:
+        errorMessage = ""
+        select_attack()
+    else:
+        errorMessage = "Niepoprawna opcja!"
+        choose_username()
+
 def select_attack():
     global errorMessage
     global target
     global dictionary
+    global username
+    global usernames
 
     clearconsole()
     displaytext()
 
 
 
-    if target or dictionary:
+    if target or dictionary or username or usernames:
         print(colored("---------------------------------------------------", "light_yellow"))
         if target:
             print(colored("IP: ", "yellow") + target)
         if dictionary:
             print(colored("Plik: ", "yellow") + dictionary)
+        if username:
+            print(colored("Username: ", "yellow") + username)
+        if usernames:
+            print(colored("Usernames: ", "yellow") + usernames)
         print(colored("---------------------------------------------------", "light_yellow"))
 
 
@@ -121,7 +190,12 @@ def select_attack():
     else:
         print(colored("[4]", "green") + "\tPlik z haslami")
 
-    print(colored("[5]", "yellow") + "\tZakończ")
+    if username == "" and usernames == "":
+        print(colored("[5]", "yellow") + "\tUżytkownik" + "\t" + colored("[!]", "light_yellow"))
+    else:
+        print(colored("[5]", "green") + "\tUżytkownik")
+
+    print(colored("[6]", "yellow") + "\tZakończ")
 
     set_attack = int(input("Wybierz opcje: "))
 
@@ -146,12 +220,14 @@ def select_attack():
         dictionary_file()
     elif set_attack == 5:
         errorMessage = ""
+        choose_username()
+    elif set_attack == 6:
+        errorMessage = ""
         print(colored("Adios!", "magenta"))
         exit()
     else:
         errorMessage = "Niepoprawna opcja!"
         select_attack()
-
 
 def start():
     displaytext()
